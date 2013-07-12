@@ -1,0 +1,26 @@
+{
+    "name": "t4s/nested-sets",
+    "description": "A nested set implementation ",
+    "license": "BSD-3-Clause",
+    "keywords": ["Nested Set","Nested Sets","Laravel","Laravel 4"],
+    "homepage": "https://github.com/taftse/Excalibur/",
+    "authors": [
+        {
+            "name": "Timothy Seebus",
+            "email": "timothyseebus@tools4schools.org"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "illuminate/support": "4.0.x"
+    },
+    "autoload": {
+        "classmap": [
+            "src/migrations"
+        ],
+        "psr-0": {
+            "T4s\\NestedSets": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
