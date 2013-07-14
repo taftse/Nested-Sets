@@ -30,8 +30,8 @@ class NestedModel extends Model
 
 	public function initializeAsRoot()
 	{
-		$this->attributes[$this->leftColumn] = 1;
-		$this->attributes[$this->rightColumn] = 2;
+		$this->attributes[$this->leftColumn] = 0;
+		$this->attributes[$this->rightColumn] = 1;
 		$this->save();
 	}
 
@@ -120,6 +120,10 @@ class NestedModel extends Model
 				 ->delete();
 
 			$this->updateNodes($this->attributes[$this->rightColumn]+1,$this->attributes[$this->leftColumn]-$this->attributes[$this->rightColumn]-1);
+		}
+		else
+		{
+			
 		}
 	}
 
