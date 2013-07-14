@@ -21,6 +21,13 @@ class NestedModel extends Model
 	 */
 	protected $parent = null;
 
+	/** 
+	 * a array containing siblings
+	 *
+	 * @var
+	 */
+//	protected $siblings = array();
+
 	public function initializeAsRoot()
 	{
 		$this->attributes[$this->leftColumn] = 1;
@@ -57,36 +64,46 @@ class NestedModel extends Model
 		$childNode->{$childNode->getLeftColumn()} =  $this->attributes[$this->rightColumn];
 		$childNode->{$childNode->getRightColumn()} = $this->attributes[$this->rightColumn]+1;
 		
-		$childNode->updateNodes($childNode->{$childNode->getLeftColumn()}, 2);
-
-		$this->attributes[$this->rightColumn] = $this->attributes[$this->rightColumn] +2;
+		$this->updateNodes($childNode->{$childNode->getLeftColumn()}, 2);
+		$this->updateParentNodes(2);
 
 		return $childNode->save();
 	}
 
-	/*public function appendFirstChild(NestedModel $childNode)
+	/**
+	 * Adds a node (older sibling) to the left of this node
+	 * (just incase mom or dad was unfaithfull)
+	 *
+	 * @param T4s\NestedSets\NestedModel the new sibling node
+	 * @return bool success
+	 */
+	public function addOlderSibling(NestedModel $newSiblingNode)
 	{
-		$childNode->{$childNode->getLeftColumn()} = $this->attributes[$this->leftColumn] + 1;
-		$childNode->{$childNode->getRightColumn()} = $this->attributes[$this->leftColumn] +2;
+		$newSiblingNode->{$newSiblingNode->getLeftColumn()} = $this->attributes[$this->leftColumn];
+		$newSiblingNode->{$newSiblingNode->getRightColumn()} = $this->attributes[$this->leftColumn]+1;
+		
+		$this->updateNodes($newSiblingNode->{$newSiblingNode->getLeftColumn()}, 2);
 
-		$childNode->updateNodes($childNode->{$childNode->getLeftColumn()}, 2);
+		return $newSiblingNode->save();
 
-		$childNode->save();
-		return $childNode;
 	}
 
-	public function appendLastChild(NestedModel $childNode)
+	/**
+	 * Adds a node (younger sibling) to the right of this node
+	 *
+	 * @param T4s\NestedSets\NestedModel the new sibling node
+	 * @return bool success
+	 */
+	public function addYoungerSibling(NestedModel $newSiblingNode)
 	{
-		$childNode->{$childNode->getLeftColumn()} = $this->attributes[$this->rightColumn];
-		$childNode->{$childNode->getRightColumn()} = $this->attributes[$this->rightColumn]+1;
-
-		$childNode->updateNodes($childNode->{$childNode->getLeftColumn()}, 2);
-
-		$childNode->save();
-		return $childNode;
+		$newSiblingNode->{$newSiblingNode->getLeftColumn()} = $this->attributes[$this->rightColumn]+1;
+		$newSiblingNode->{$newSiblingNode->getRightColumn()} = $this->attributes[$this->rightColumn]+2;
+		
+		$this->updateNodes($newSiblingNode->{$newSiblingNode->getLeftColumn()}, 2);
+		
+		return $newSiblingNode->save();
 	}
 
-	*/
 
 	protected function updateNodes($nodeInt,$changeValue)
 	{
@@ -104,7 +121,24 @@ class NestedModel extends Model
 			$this->parent->updateParentNodes($changeValue);
 		}
 	}
-
+/*
+	protected function updateSiblingNodes($side,$changeValue)
+	{
+		$this->attributes[$this->leftColumn] = $this->attributes[$this->leftColumn] +$changeValue;
+		if($side =='left')
+		{
+			
+			foreach ($this->siblings as $sibling) {
+				$sibling->updateSiblingNodes('left',$changeValue);
+			}
+		}
+		else if($side =='right')
+		{
+			
+			$this->attributes[$this->rightColumn] = $this->attributes[$this->rightColumn]+$changeValue;
+		}
+	}
+*/
 	public function getLeftColumn()
 	{
 		return $this->leftColumn;
