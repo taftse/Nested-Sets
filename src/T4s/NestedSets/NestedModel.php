@@ -105,6 +105,28 @@ class NestedModel extends Model
 	}
 
 
+	/**
+	 * Deletes this node with its children from the tree
+	 *
+	 * @param bool do we delete the children (true = yes, false= no, defauls to true)
+	 */
+
+	public function delete($withChildren = true)
+	{
+		if($withChildren == true)
+		{
+			$this->where($this->leftColumn,'>=',$this->attributes[$this->leftColumn])
+				 ->where($this->rightColumn,'<=',$this->attributes[$this->rightColumn])
+				 ->delete();
+
+			$this->updateNodes($this->attributes[$this->rightColumn]+1,$this->attributes[$this->leftColumn]-$this->attributes[$this->rightColumn]-1);
+		}
+	}
+
+
+
+
+
 	protected function updateNodes($nodeInt,$changeValue)
 	{
 		$this->where($this->leftColumn,'>=',$nodeInt)->increment($this->leftColumn, $changeValue);
@@ -121,6 +143,7 @@ class NestedModel extends Model
 			$this->parent->updateParentNodes($changeValue);
 		}
 	}
+
 /*
 	protected function updateSiblingNodes($side,$changeValue)
 	{
