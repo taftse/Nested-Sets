@@ -3,7 +3,9 @@
     "description": "A nested set implementation ",
     "license": "BSD-3-Clause",
     "keywords": ["Nested Set","Nested Sets","Laravel","Laravel 4"],
-    "homepage": "https://github.com/taftse/Nested-Sets/",
+    "homepage": "https://github.com/taftse/Nested-Sets
+
+    /",
     "authors": [
         {
             "name": "Timothy Seebus",
